@@ -1,241 +1,441 @@
 ---
-title: API Reference
+title: SCML ModelServer API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
   - python
-  - javascript
 
-toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
-
-includes:
-  - errors
 
 search: true
 
 code_clipboard: true
 ---
 
-# Introduction
+# Root
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+## SCMLModelServer
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+Welcome to the SCMLModelServer API. 
+
+You can use our API to access the endpoints, which serves the predictions of our ML models for the specific projects.
+
+You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
 This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
-# Authentication
+### Actions
+The query string parameters helps in identifying whether a user with a valid permission can access the resource. The general structure template of a v2 url is shown with an example.
 
-> To authorize, use this code:
+`actions?op=VALID_OP&org=None&pid=VALID_PID&expid=VALID_EXPID`
 
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>VALID_PID</code> with actual project id and <code>VALID_EXPID </code> with actual experiment id 
+and replace <code>VALID_OP</code> with operation.
+
 </aside>
 
-# Kittens
+### Query String Parameters
+Parameter | RefersTo | Type | Description
+--------- | ------- | ----------- | ----------
+op | operation | String | Operation that is to be performed by scmlmodelserver.
+org | Organization | String | This is an `optional` parameter. Default value is None. Eg: ```org=None```
+pid | project id | String | The project id for which the operation is to be applied
+expid | experiment id | String | Needs to be a valid experiment id
 
-## Get All Kittens
 
-```ruby
-require 'kittn'
+### Inference 
+### Native Exact Query
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
+ Native Exact Query endpoint returns the predictions that match the exact location and time, for the time those that are available in the predictions. The data pertaining to the query is returned almost instantanesouly.
 
-```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+`operation=scmlmodelserver.native`
 
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+modelserver_url = 'http://{BASE_URL}/v2/actions?op=scmlmodelserver.native&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url,
+json = {
+        "t":"2020-09-30 00:00:00",
+        "groupcol":"ABC"
+      })     
+print(response)
+
 ```
 
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
+insid | datecol | y | yhat | yhat_lower | yhat_upper
+------|----|---------------------|---|-----------|---------
+ABC|2020-09-30 00:00:00|0.0|0|0|3
 
-```javascript
-const kittn = require('kittn');
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
+#### HTTP Request
 
-> The above command returns JSON structured like this:
+`POST http://{BASE_URL}/v2/actions?op=scmlmodelserver.native&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+> Request Body 
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+	"t":"2020-09-30 00:00:00",
+	"groupcol":"ABC"
 }
 ```
 
-This endpoint retrieves a specific kitten.
+#### Body Parameters
+Parameter | Format | Type | Description
+--------- | ------- | ----------- | ----------
+t | yyyy-mm-dd HH:MM:SS | String | The datetime parameter in the specified format yyyy-mm-dd HH:MM:SS to get predictions for the specific instant in time.
+groupcol | | String | A valid value of the groupcol. Typically a location for which the predictions need to be fetched. 
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
 
-### HTTP Request
+This API is currently used to serve predictions made by algorithms like forecasting and regression.
 
-`GET http://example.com/kittens/<ID>`
+### Range Query
 
-### URL Parameters
+ Range Query endpoint enables users to query predictions for a location within the time-range for which the predictions were made.
+ 
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
-
-## Delete a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
-```
+`operation=scmlmodelserver.range`
 
 ```python
-import kittn
 
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
+modelserver_url = 'http://{BASE_URL}/v2/actions?op=scmlmodelserver.range&org=None&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url,
+json = {
+        "start":"2020-10-12 00:00:00",
+        "end":"2020-10-12 00:02:00",
+        "groupcol":"291"
+      })  
+print(response)
 ```
 
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
+devid | datecol | predicted | predicted_std | predicted_lower | predicted_upper
+------|----------------| ----------| --------------| ---------------- |----------------
+291 | 2020-10-12 00:00:00 | 1.381434 | 0.0157629 | 1.350538 | 1.412329
+291 | 2020-10-12 00:01:00 | 1.380413 | 0.014606  | 1.351783 | 1.409042
+291 | 2020-10-12 00:02:00 | 1.378264 | 0.014029  | 1.350765 | 1.405762
 
-```javascript
-const kittn = require('kittn');
 
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
 
-> The above command returns JSON structured like this:
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlmodelserver.range&org=None&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+> Request Body 
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+    "start":"2020-10-12 00:00:00",
+    "end":"2020-10-12 00:02:00",
+    "groupcol":"291"
 }
 ```
 
-This endpoint deletes a specific kitten.
+#### Body Parameters
+Parameter | Format | Type | Description
+--------- | ------- | ----------- | ----------
+start | yyyy-mm-dd HH:MM:SS | String | start-time in specified format
+end | yyyy-mm-dd HH:MM:SS | String | end-time in specified format
+groupcol | | String | A valid value of the groupcol. Typically a location for which the predictions need to be fetched. 
 
-### HTTP Request
+This API is currently used to serve predictions made by algorithms like forecasting and regression.
 
-`DELETE http://example.com/kittens/<ID>`
+### Anomaly
 
-### URL Parameters
+API to query anomaly labelled grid data points. In this setting we define a near-exact match. The near exact match rounds down the value to the near existing value in the grid and returns the data point with anomaly score and class.
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+`operation=scmlmodelserver.anomalyNative`
+
+```python
+
+modelserver_url = 'http://{BASE_URL}/v2/actions?op=scmlmodelserver.anomalyNative&org=None&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url,
+json = {
+        "dim1":0.5,
+        "dim2":0.9,
+        "groupcol":"ABC"
+})  
+print(response)
+```
+
+,|grid_amm|grid_voc|anomaly_score|anomaly_class|groupcol
+-----|--------|---------|-------------|--------------|---------------
+212|0.555555 | 1.111111 | 0.683830 | -1 | ABC
+
+`Anomaly Class = -1` 
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlmodelserver.anomalyNative&org=None&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+> Request Body 
+
+```json
+{
+    "dim1":0.5,
+    "dim2":0.9,
+    "groupcol":"ABC"
+}
+```
+
+#### Body Parameters
+Parameter | Format | Type | Description
+--------- | ------- | ----------- | ----------
+dim1 | amm | float | The amm value to be queried
+dim2 | voc | float | The voc value to be queried
+groupcol | | String | A valid value of the groupcol. Typically a location for which the predictions need to be fetched. 
+
+This API is currently used to serve predictions made by anoamly detection algorithms.
+
+### Standard SQL
+  operation=`scmlmodelserver.sql`
+
+```python
+modelserver_url = 'http://{BASE_URL}/v2/actions?op=scmlmodelserver.sql&org=None&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url,
+json = {
+	      "q":"select * from $df limit 10"
+      })  
+print(response)
+```
+
+A generic SQL query endpoint. Any sql query can be passed and executed by the server to get the results. This endpoint is available 
+for all the algorithms. Use the literal `$df` as part of the query which refers to the table name internally. 
+
+,| insid | devid | Unnamed: 0 | usage
+--|----|-------|------------|--------
+0 | ABC | 423 | 0 | 228.28888
+1 | DEF | 245 | 1 | 44.377777
+2 | TGH | 865 | 2 | 107.24444
+3 | PQR | 197 | 3 | 147.29523
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlmodelserver.sql&org=None&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+
+> Request Body 
+
+```json
+{
+    "q":"select * from $df limit 10
+}
+```
+
+#### Body Parameters
+Parameter | Format | Type | Description
+--------- | ------- | ----------- | ----------
+q | SQL Statement | String | A valid SQL statement
+
+
+### ActiveLoad
+  operation=`scmlmodelserver.activeLoad`
+
+```python
+modelserver_url = 'http://{BASE_URL}/v2/actions?op=scmlmodelserver.activeLoad&org=None&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url)
+print(response)
+```
+This endpoint deletes past last run of an experiment if it is present in scmlmodelserver. It loads the latest run predicitions for serving. This endpoint is called by a trigger which automatically updates latest run of an experiment for serving.
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlmodelserver.activeLoad&org=None&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+
+The response contains the same output as Plain SQL response.
+
+### Delete 
+  operation=`scmlmodelserver.delete`
+  
+```python
+modelserver_url = 'http://{BASE_URL}/v2/actions?op=scmlmodelserver.delete&org=None&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url)
+print(response)
+```
+An endpoint to delete the current run object from memory and any associated files of the current run from scmlmodelserver.
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlmodelserver.sql&org=None&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+
+
+> Response
+
+```json
+{
+    "func_status": "success",
+    "status_code": 200
+}
+```
+### Architecture 
+ModelServer System Architecture [link](https://github.com/smmahe/test/blob/master/Model_Server_System.pdf).
+
+## SCMLExperiments 
+### Experiment
+
+When a new algorithm needs to be added to the zoo so that it is part of SCML Algorithms, a new experiment object is created with config.
+config is a nested object, which contains parameters specific for the algorithm in `algorithm` config.
+
+`query` config encapsulates information needed to query data from cloud datastore.
+
+`prediction` contains information about the validity of predictions typically a week, unit of prediction whether it is hourly, minute.
+
+`state` refers to the state of the experiment. `NORMAL` is the desired state.
+Any other state requires either retraining or changes so the following run can complete and update state accordingly.
+
+### Run 
+Run is the execution of an experiment. Generates the predictions to be served and updates the experiment object to always refer to the current valid run. When a run exists successfully it updates experiment to be in `NORMAL` state.
+
+
+### Get Experiments For a Project
+
+Get all experiments for a project. The caller specifies the project id and is able to fetch all the experiments for the project.
+
+```python
+
+api = 'http://{BASE_URL}/v2/actions?op=scmlexperiments.listExperiments&org=None&pid=VALID_PID'
+response = requests.post(api)
+print(response)
+
+```
+
+#### HTTP Request
+
+`GET http://{BASE_URL}/v2/actions?op=scmlexperiments.listExperiments&org=None&pid=VALID_PID`
+
+#### Response
+
+A jsonarray of experiment objects
+
+
+### Get Experiment By Id For a Project
+
+Get a specific experiment for a project by experiment id. 
+
+```python
+
+api = 'http://{BASE_URL}/v2/actions?op=scmlexperiments.getExperiment&org=None&pid=VALID_PID'
+response = requests.post(api,json=json_data)
+print(response)
+
+```
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlexperiments.getExperiment&org=None&pid=VALID_PID`
+
+> Request Body
+
+A json containing the experiment id
+
+```json
+{
+  "expid": "valid_expid"
+}
+```
+
+#### Response
+
+A json response containing the experiment object 
+
+### Get Any Run For an Experiment of a Project
+
+Get a specific valid run object by specifying the run number for an experiment of a project.
+
+```python
+
+api = 'http://{BASE_URL}/v2/actions?op=scmlexperiments.getRunForExperiment&org=None&pid=VALID_PID'
+response = requests.post(api,json=json_data)
+print(response)
+
+```
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlexperiments.getRunForExperiment&org=None&pid=VALID_PID`
+
+> Request Body
+
+A json containing the expid value and a run number
+
+```json
+{
+  "expid" : "valid_expid",
+  "run"   : "10"
+}
+```
+#### Response
+
+A json response containing the run object
+
+### Get Latest Run For an Experiment of a Project
+
+
+Returns the valid latest run object of an experiment. 
+
+```python
+
+api = 'http://{BASE_URL}/v2/actions?op=scmlexperiments.getLatestRun&org=None&pid=VALID_PID'
+response = requests.post(api)
+print(response)
+```
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlexperiments.getLatestRun&org=None&pid=VALID_PID`
+
+> Request Body
+
+A json containing the expid value 
+
+```json
+{
+  "expid" : "valid_expid" 
+}
+```
+#### Response
+
+A json response containing the latest run object for that experiment
+
+
+### Get Last N Runs For an Experiment of a Project
+
+
+Returns the valid latest run object of an experiment. 
+
+```python
+
+api = 'http://{BASE_URL}/v2/actions?op=scmlexperiments.getLastNRuns&org=None&pid=VALID_PID'
+response = requests.post(api,json=json_data)
+print(response)
+```
+
+#### HTTP Request
+
+`POST http://{BASE_URL}/v2/actions?op=scmlexperiments.getLastNRuns&org=None&pid=VALID_PID`
+
+> Request Body
+
+A json containing the expid value 
+
+```json
+{
+  "expid" : "valid_expid",
+  "N"     : "N"
+}
+```
+#### Response
+
+A json response containing the last n run objects for an experiment. At most can be able to query last 10 runs.
+
 
