@@ -276,6 +276,75 @@ An endpoint to delete the current run object from memory and any associated file
     "status_code": 200
 }
 ```
+
+## NamedQuery
+  operation=`scmlmodelserver.executeNamedQuery`
+
+```python
+modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.executeNamedQuery&org=None&pid=VALID_PID&expid=VALID_EXPID'
+response = requests.post(modelserver_url)
+print(response)
+```
+This endpoint creates a sql query with the values provided, executes it and returns the result to the user. Predefined queries can
+be added as a template and referred by a unique ID provided at the time of creation. The endpoint offers an interface to get metrics just by providing values to specified columns.
+
+### HTTP Request
+
+`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.executeNamedQuery&org=None&pid=VALID_PID&expid=VALID_EXPID`
+
+`Content-type:application/json`
+
+The response contains the same output as Plain SQL response.
+
+### Body Parameters
+
+Parameter | Format | Type | Description
+--------- | ------- | ----------- | ----------
+id | id_for_sql_template | String | ''' sql template '''
+attr | attr_value | String | To identify template
+params | list of key-value pairs | A generic key-val structure, with specific parameter in `key` and specific value in `value`
+
+
+
+```json
+  { 
+    "id":"id_given_for_the_query_template",
+    "attr":"attr#service#psql",
+    "params":
+      [
+            {
+              "key": "datecol",
+              "value":"datecolval"
+            },
+
+            {
+              "key": "date_e_val",
+              "value":"valid_date"
+            },
+            {
+              "key": "groupcol",
+          "value":"valid_groupcol" 
+            },
+            {
+              "key": "groupcol_val",
+              "value":"valid_groupcol_val"
+            },
+            {
+              "key":"col",
+              "value":"predicted_column_name"
+            }
+      ]
+  }
+  ```
+
+### Response
+,|insid | minimum | q1 | median | q3 |maximum
+-|-----|----------|---|--------|-----|-------
+0 | ABC | 0 | 0.0 | 0.0 | 1.0 | 2
+1 | DEF | 0 | 1.0 | 3.0 | 8.0 | 14
+
+
+
 ## Architecture 
 ModelServer System Architecture [link](https://github.com/smmahe/test/blob/master/Model_Server_System.pdf).
 
