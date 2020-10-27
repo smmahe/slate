@@ -8,9 +8,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
 search: true
 
 code_clipboard: true
----
 
-# Root
+---
 
 # SCMLModelServer
 
