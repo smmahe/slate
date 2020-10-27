@@ -11,42 +11,52 @@ code_clipboard: true
 
 ---
 
-# ML ModelServer
+# Home
 
-Welcome to the ML ModelServer API.
-
-The API can be used to access the endpoints pertaining to SmartClean's ML offerings that serve predictions of various ML models for enabled projects and organisations.
+This document describes various operations available across SmartClean Matrix platform.
 
 The code examples can be viewed in the dark area to the right, and the programming language of the examples can be switched with the tabs in the top right.
 
+The current base URL is
+
 <aside class="notice">
-The Latest available version is <code>version</code> v2.
+<code>https://console.smartclean.io/api</code>
 </aside>
 
-## Actions
-The query string parameters helps in identifying whether a user with a valid permission can access the resource. The general structure template of a <version> url is shown with an example.
+Each microservice hosts its endpoints in a proper versioned manner allowing backward compatibility. Breaking version upgrades, if any, will be communicated appropriately.
 
-`actions?op=<operation>&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+Please contact SmartClean for obtaining valid credentials required to invoke the endpoints.
+
+## Actions
+The general schema of invoking a microservice endpoint is:
+
+<code>`https://<base URL>/<service>/<version>/actions?op=<operation>&org=<orgId>&pid=<projectId>&expid=<experimentId>`</code>
 
 
 <aside class="notice">
-You must replace <code>projectId</code> with actual project id and <code>experimentId </code> with actual experiment id 
-and replace <code>operation</code> with operation and replace <code>version</code> with v2.
-
+You must replace <code>service</code> with the microservice identifier, <code>orgId</code> with your organisation identifier, <code>projectId</code> with valid project identifier, <code>operation</code> with operation and <code>version</code> with the version of API being used.
 </aside>
 
 ## Query String Parameters
 Parameter | RefersTo | Type | Description
 --------- | ------- | ----------- | ----------
-op | operation | String | Operation that is to be performed by scmlmodelserver.
-org | Organization | String | This is an `optional` parameter. Default value is None. Eg: ```org=<orgId>```
-pid | project id | String | The project id for which the operation is to be applied
-expid | experiment id | String | Needs to be a valid experiment id
+op | operation | String | Operation that is to be performed by the microservice.
+org | Organization | String | This identifies the organization context of the caller.
+pid | project id | String | The project id for which the operation is to be applied.
 
+# ML ModelServer
+
+Welcome to the ML ModelServer API documentation.
+
+The API can be used to access the endpoints pertaining to SmartClean's ML offerings that serve predictions of various ML models for enabled projects and organisations.
+
+<aside class="notice">
+The Latest available version is <code>version v2</code>.
+</aside>
 
 ## Native Exact Query
 
- Native Exact Query endpoint returns the predictions that match the exact location and time, for the time those that are available in the predictions. The data pertaining to the query is returned almost instantanesouly.
+Native Exact Query endpoint returns the predictions that match the exact location and time, for the time those that are available in the predictions. The data pertaining to the query is returned almost instantanesouly.
 
 
 `operation=scmlmodelserver.native`
@@ -55,7 +65,7 @@ expid | experiment id | String | Needs to be a valid experiment id
 
 ```python
 
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.native&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.native&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
         "t":"2020-09-30 00:00:00",
@@ -72,7 +82,7 @@ ABC|2020-09-30 00:00:00|0.0|0|0|3
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.native&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.native&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 > Request Body 
@@ -102,7 +112,7 @@ This API is currently used to serve predictions made by algorithms like forecast
 
 ```python
 
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.range&org=<orgId>&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.range&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
         "start":"2020-10-12 00:00:00",
@@ -122,7 +132,7 @@ devid | datecol | predicted | predicted_std | predicted_lower | predicted_upper
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.range&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.range&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 > Request Body 
@@ -152,7 +162,7 @@ API to query anomaly labelled grid data points. In this setting we define a near
 
 ```python
 
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.anomalyNative&org=<orgId>&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.anomalyNative&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
         "dim1":0.5,
@@ -170,7 +180,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.anomalyNative&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.anomalyNative&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 > Request Body 
@@ -196,7 +206,7 @@ This API is currently used to serve predictions made by anoamly detection algori
   operation=`scmlmodelserver.sql`
 
 ```python
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
 	      "q":"select * from $df limit 10"
@@ -216,7 +226,7 @@ for all the algorithms. Use the literal `$df` as part of the query which refers 
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -238,7 +248,7 @@ q | SQL Statement | String | A valid SQL statement
   operation=`scmlmodelserver.activeLoad`
 
 ```python
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.activeLoad&org=<orgId>&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.activeLoad&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url)
 print(response)
 ```
@@ -246,7 +256,7 @@ This endpoint deletes past last run of an experiment if it is present in scmlmod
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.activeLoad&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.activeLoad&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -256,7 +266,7 @@ The response contains the same output as Plain SQL response.
   operation=`scmlmodelserver.delete`
   
 ```python
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.delete&org=<orgId>&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.delete&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url)
 print(response)
 ```
@@ -264,7 +274,7 @@ An endpoint to delete the current run object from memory and any associated file
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -282,7 +292,7 @@ An endpoint to delete the current run object from memory and any associated file
   operation=`scmlmodelserver.executeNamedQuery`
 
 ```python
-modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.executeNamedQuery&org=<orgId>&pid=<projectId>&expid=<experimentId>'
+modelserver_url = 'https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.executeNamedQuery&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url)
 print(response)
 ```
@@ -291,7 +301,7 @@ be added as a template and referred by a unique ID provided at the time of creat
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.executeNamedQuery&org=<orgId>&pid=<projectId>&expid=<experimentId>`
+`POST https://<baseURL>/scmlmodelserver/<version>/actions?op=scmlmodelserver.executeNamedQuery&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -347,7 +357,16 @@ params | list of key-value pairs | A generic key-val structure, with specific pa
 1 | DEF | 0 | 1.0 | 3.0 | 8.0 | 14
 
 
-# ML Experiments 
+# ML Experiments
+
+Welcome to the ML Experiments API documentation.
+
+The API can be used to access the endpoints pertaining to SmartClean's ML offerings that serve predictions of various ML models for enabled projects and organisations.
+
+<aside class="notice">
+The Latest available version is <code>version v1</code>.
+</aside>
+
 ## Experiment
 
 When a new algorithm needs to be added to the zoo so that it is part of SCML Algorithms, a new experiment object is created with config.
@@ -372,7 +391,7 @@ Get all experiments for a project. The caller specifies the project id and is ab
 
 ```python
 
-api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>'
+api = 'https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>'
 response = requests.post(api)
 print(response)
 
@@ -380,7 +399,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>`
+`POST https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>`
 
 ### Response
 
@@ -395,7 +414,7 @@ Get a specific experiment for a project by experiment id.
 
 ```python
 
-api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getExperiment&org=<orgId>&pid=<projectId>'
+api = 'https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getExperiment&org=<orgId>&pid=<projectId>'
 response = requests.post(api,json=json_data)
 print(response)
 
@@ -403,7 +422,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getExperiment&org=<orgId>&pid=<projectId>`
+`POST https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getExperiment&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
@@ -427,7 +446,7 @@ Get a specific valid run object by specifying the run number for an experiment o
 
 ```python
 
-api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getRunForExperiment&org=<orgId>&pid=<projectId>'
+api = 'https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getRunForExperiment&org=<orgId>&pid=<projectId>'
 response = requests.post(api,json=json_data)
 print(response)
 
@@ -435,7 +454,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getRunForExperiment&org=<orgId>&pid=<projectId>`
+`POST https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getRunForExperiment&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
@@ -460,7 +479,7 @@ Returns the valid latest run object of an experiment.
 
 ```python
 
-api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getLatestRun&org=<orgId>&pid=<projectId>'
+api = 'https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getLatestRun&org=<orgId>&pid=<projectId>'
 response = requests.post(api)
 print(response)
 ```
@@ -492,14 +511,14 @@ Returns the valid latest run object of an experiment.
 
 ```python
 
-api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getLastNRuns&org=<orgId>&pid=<projectId>'
+api = 'https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getLastNRuns&org=<orgId>&pid=<projectId>'
 response = requests.post(api,json=json_data)
 print(response)
 ```
 
 ### HTTP Request
 
-`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getLastNRuns&org=<orgId>&pid=<projectId>`
+`POST https://<baseURL>/scmlexperiments/<version>/actions?op=scmlexperiments.getLastNRuns&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
@@ -516,7 +535,48 @@ A json containing the expid value
 A json response containing the last n run objects for an experiment. At most can be able to query last 10 runs.
 
 
-# Third Party Integration
+# Third Party Integrations
+
+Welcome to third party integrations API documentation.
+
+This service allows listeners to receive events from SmartClean system such as: data, workorders and aggregations.
+
+Workorders are sent to the endpoint per such event while data and aggregations are sent in batches.
+
+Current supported integration types include custom HTTP, Azure EventHub and AWS IoT endpoints utilizing basic auth, access key, Azure shared access key or AWS HMAC signing.
+
+<aside class="notice">
+The Latest available version is <code>version v1</code>.
+</aside>
+
+## General configuration of an integration endpoint.
+
+A typical configuration requires at least the following parameters:
+
+Parameter | Format | Type | Description
+--------- | ------- | ----------- | ----------
+Type | Selection from system defined types | String | A valid type supported by the API version
+Principal | Selection from system defined event sources | String | A valid event source from Matrix
+Entity | Selection from system defined entity types for the principal | String | A valid entity type for the principal
+Authorization | Auth type selected from system defined dictionary | String | A valid auth mechanism
+METHOD | Method to use for sending requests | String | Any of POST, PUT or GET
+PayloadLocation | The location of payload to be sent | String | Any of body or querystring
+KeyMap | A jsonpath transformation of keys to be extracted from source and placed in new outgoing document | Object | Valid jsonpath key-value pairs corresponding to source data items
+ValueMap | A lookup operation on values of a key to transform | SCValueMap | Lookups post keymap operation allows custom id mappings to be performed for outgoing data items
+
+## Supported protocols
+
+HTTPS
+
+HTTP based endpoints can be used to serve the purpose of receivers that can then be further utilized to convert to appropriate protocols by clients.
+
+Future support will include websocket, HTTP2.0 and MQTT listeners.
+
+## Supported authorization mechanisms
+
+1. Basic authentication
+2. AWS HMAC signing with access key and secret key pair
+3. Azure shared access key name and value pair
 
 ## List all third party integrations for a project
 
@@ -526,13 +586,13 @@ An endpoint to query all the available third party integrations for a project.
 
 ```python
 
-api = 'https://console.smartclean.io/api/sctpi/v1/actions?op=scthirdpartyintegrations.listIntegrations&pid=<projectId>&org=<orgId>'
+api = 'https://<baseURL>/sctpi/v1/actions?op=scthirdpartyintegrations.listIntegrations&pid=<projectId>&org=<orgId>'
 response = requests.post(api,json=json_data)
 print(response)
 ```
 
 ### HTTP Request
-`POST https://console.smartclean.io/api/sctpi/v1/actions?op=scthirdpartyintegrations.listIntegrations&pid=<projectId>&org=<orgId>`
+`POST https://<baseURL>/sctpi/v1/actions?op=scthirdpartyintegrations.listIntegrations&pid=<projectId>&org=<orgId>`
 
 ### Response
 
@@ -543,7 +603,6 @@ A json response containing the third party integrations for specified project.
 ```json
 
 {
-  "ATTR": "attr#thirdpartyintegrations#sysdefault",
   "Details": {
     "Authorization": {
       "Details": {
@@ -551,7 +610,7 @@ A json response containing the third party integrations for specified project.
       },
       "Key": "AuthKey",
       "Type": "AuthType",
-      "Value": "If basic"
+      "Value": "If AuthType is Basic, value contains the credentials"
     },
     "Headers": [
     ],
@@ -579,4 +638,23 @@ A json response containing the third party integrations for specified project.
   "UID": "sysdefault"
 }
 
+```
+
+## Example JSON batch data payloads sent to an HTTP listener
+```json
+{
+	"dataObj": [
+		{
+			"hour": <Hour of day of project timezone>,
+			"dom": <Day of month of project timezone>,
+			"dow": <Day of week of project timezone>,
+			"month": <Month of year of project timezone>,
+			"unixT": <Unix timestamp with millisecond precision>,
+			"Region": <Timezone of the project>,
+			"DevType": <Type of event source>,
+			"v": <Data value item of event source>,
+			"stats": <Any ML tags appended to the data item>
+		}
+	]
+}
 ```
