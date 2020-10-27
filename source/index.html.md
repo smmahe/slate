@@ -13,13 +13,11 @@ code_clipboard: true
 
 # SCMLModelServer
 
-Welcome to the SCMLModelServer API. 
+Welcome to the SCMLModelServer API.
 
-You can use our API to access the endpoints, which serves the predictions of our ML models for the specific projects.
+The API can be used to access the endpoints pertaining to SmartClean's ML offerings that serve predictions of various ML models for enabled projects and organisations.
 
-You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
+The code examples can be viewed in the dark area to the right, and the programming language of the examples can be switched with the tabs in the top right.
 
 <aside class="notice">
 The Latest available version is <code>version</code> v2.
@@ -117,8 +115,8 @@ print(response)
 devid | datecol | predicted | predicted_std | predicted_lower | predicted_upper
 ------|----------------| ----------| --------------| ---------------- |----------------
 291 | 2020-10-12 00:00:00 | 1.381434 | 0.0157629 | 1.350538 | 1.412329
-291 | 2020-10-12 00:01:00 | 1.380413 | 0.014606  | 1.351783 | 1.409042
-291 | 2020-10-12 00:02:00 | 1.378264 | 0.014029  | 1.350765 | 1.405762
+292 | 2020-10-12 00:01:00 | 1.380413 | 0.014606  | 1.351783 | 1.409042
+293 | 2020-10-12 00:02:00 | 1.378264 | 0.014029  | 1.350765 | 1.405762
 
 
 
@@ -347,10 +345,6 @@ params | list of key-value pairs | A generic key-val structure, with specific pa
 1 | DEF | 0 | 1.0 | 3.0 | 8.0 | 14
 
 
-
-## Architecture 
-ModelServer System Architecture [link](https://github.com/smmahe/test/blob/master/Model_Server_System.pdf).
-
 # SCMLExperiments 
 ## Experiment
 
@@ -372,6 +366,8 @@ Run is the execution of an experiment. Generates the predictions to be served an
 
 Get all experiments for a project. The caller specifies the project id and is able to fetch all the experiments for the project.
 
+`operation=scmlexperiments.listExperiments`
+
 ```python
 
 api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>'
@@ -382,7 +378,7 @@ print(response)
 
 ### HTTP Request
 
-`GET https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>`
+`POST https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>`
 
 ### Response
 
@@ -392,6 +388,8 @@ An array of experiment objects
 ## Get Experiment By Id For a Project
 
 Get a specific experiment for a project by experiment id. 
+
+`operation=scmlexperiments.getExperiment`
 
 ```python
 
@@ -422,6 +420,8 @@ A json response containing the experiment object
 ## Get Any Run For an Experiment of a Project
 
 Get a specific valid run object by specifying the run number for an experiment of a project.
+
+`operation=scmlexperiments.getRunForExperiment`
 
 ```python
 
@@ -454,6 +454,8 @@ A json response containing the run object
 
 Returns the valid latest run object of an experiment. 
 
+`operation=scmlexperiments.getLatestRun`
+
 ```python
 
 api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getLatestRun&org=<orgId>&pid=<projectId>'
@@ -483,6 +485,8 @@ A json response containing the latest run object for that experiment
 
 
 Returns the valid latest run object of an experiment. 
+
+`operation=scmlexperiments.getLastNRuns`
 
 ```python
 
