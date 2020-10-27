@@ -514,3 +514,67 @@ A json containing the expid value
 A json response containing the last n run objects for an experiment. At most can be able to query last 10 runs.
 
 
+# Third Party Integration
+
+## List all third party integrations for a project
+
+An endpoint to query all the available third party integrations for a project.
+
+`operation=scthirdpartyintegrations.listIntegrations`
+
+```python
+
+api = 'https://console.smartclean.io/api/sctpi/v1/actions?op=scthirdpartyintegrations.listIntegrations&pid=<projectId>&org=<orgId>'
+response = requests.post(api,json=json_data)
+print(response)
+```
+
+### HTTP Request
+`POST https://console.smartclean.io/api/sctpi/v1/actions?op=scthirdpartyintegrations.listIntegrations&pid=<projectId>&org=<orgId>`
+
+### Response
+
+A json response containing the third party integrations for specified project.
+
+> Response 
+
+```json
+
+{
+  "ATTR": "attr#thirdpartyintegrations#sysdefault",
+  "Details": {
+    "Authorization": {
+      "Details": {
+           // Details for auth type selected.
+      },
+      "Key": "AuthKey",
+      "Type": "AuthType",
+      "Value": "If basic"
+    },
+    "Headers": [
+    ],
+    "KeyMap": {
+    },
+    "METHOD": "POST",
+    "PayloadKey": "$default",
+    "PayloadLocation": "body",
+    "ProceedKeyMapError": false,
+    "ProceedValueMapError": true,
+    "URI": "https://<endpoint>",
+    "ValueMap": [
+    ]
+  },
+  "NS": "THIRD_PARTY_INTEGRATIONS",
+  "PID": "projectId",
+  "Principal": "scproductivity",
+  "SCEntity": {
+    "Actions": [
+      "data.aggregations.raw"
+    ],
+    "Entity": "Data"
+  },
+  "Type": "HTTP",
+  "UID": "sysdefault"
+}
+
+```
