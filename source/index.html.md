@@ -1,5 +1,5 @@
 ---
-title: SCML ModelServer API Reference
+title: ML ModelServer API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - python
@@ -11,9 +11,9 @@ code_clipboard: true
 
 ---
 
-# SCMLModelServer
+# ML ModelServer
 
-Welcome to the SCMLModelServer API.
+Welcome to the ML ModelServer API.
 
 The API can be used to access the endpoints pertaining to SmartClean's ML offerings that serve predictions of various ML models for enabled projects and organisations.
 
@@ -302,7 +302,8 @@ The response contains the same output as Plain SQL response.
 Parameter | Format | Type | Description
 --------- | ------- | ----------- | ----------
 id | id_for_sql_template | String | ''' sql template '''
-attr | attr_value | String | To identify template
+qcontext | query-context | String | Global context
+qtype | mlsql | String | ML query type
 params | list of key-value pairs | A generic key-val structure, with specific parameter in `key` and specific value in `value`
 
 
@@ -310,7 +311,8 @@ params | list of key-value pairs | A generic key-val structure, with specific pa
 ```json
   { 
     "id":"id_given_for_the_query_template",
-    "attr":"attr#service#psql",
+    "qcontext":"scglobal",
+    "qtype":"mlsql",
     "params":
       [
             {
@@ -345,7 +347,7 @@ params | list of key-value pairs | A generic key-val structure, with specific pa
 1 | DEF | 0 | 1.0 | 3.0 | 8.0 | 14
 
 
-# SCMLExperiments 
+# ML Experiments 
 ## Experiment
 
 When a new algorithm needs to be added to the zoo so that it is part of SCML Algorithms, a new experiment object is created with config.
