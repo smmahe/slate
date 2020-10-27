@@ -22,15 +22,19 @@ You can view code examples in the dark area to the right, and you can switch the
 
 This example API documentation page was created with [Slate](https://github.com/slatedocs/slate). Feel free to edit it and use it as a base for your own API's documentation.
 
-## Actions
-The query string parameters helps in identifying whether a user with a valid permission can access the resource. The general structure template of a v2 url is shown with an example.
+<aside class="notice">
+The Latest available version is <code>version</code> v2.
+</aside>
 
-`actions?op=VALID_OP&org=None&pid=VALID_PID&expid=VALID_EXPID`
+## Actions
+The query string parameters helps in identifying whether a user with a valid permission can access the resource. The general structure template of a <version> url is shown with an example.
+
+`actions?op=<operation>&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 
 <aside class="notice">
-You must replace <code>VALID_PID</code> with actual project id and <code>VALID_EXPID </code> with actual experiment id 
-and replace <code>VALID_OP</code> with operation.
+You must replace <code>projectId</code> with actual project id and <code>experimentId </code> with actual experiment id 
+and replace <code>operation</code> with operation and replace <code>version</code> with v2.
 
 </aside>
 
@@ -38,7 +42,7 @@ and replace <code>VALID_OP</code> with operation.
 Parameter | RefersTo | Type | Description
 --------- | ------- | ----------- | ----------
 op | operation | String | Operation that is to be performed by scmlmodelserver.
-org | Organization | String | This is an `optional` parameter. Default value is None. Eg: ```org=None```
+org | Organization | String | This is an `optional` parameter. Default value is None. Eg: ```org=<orgId>```
 pid | project id | String | The project id for which the operation is to be applied
 expid | experiment id | String | Needs to be a valid experiment id
 
@@ -54,7 +58,7 @@ expid | experiment id | String | Needs to be a valid experiment id
 
 ```python
 
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.native&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.native&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
         "t":"2020-09-30 00:00:00",
@@ -71,7 +75,7 @@ ABC|2020-09-30 00:00:00|0.0|0|0|3
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.native&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.native&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 > Request Body 
@@ -101,7 +105,7 @@ This API is currently used to serve predictions made by algorithms like forecast
 
 ```python
 
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.range&org=None&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.range&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
         "start":"2020-10-12 00:00:00",
@@ -121,7 +125,7 @@ devid | datecol | predicted | predicted_std | predicted_lower | predicted_upper
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.range&org=None&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.range&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 > Request Body 
@@ -151,7 +155,7 @@ API to query anomaly labelled grid data points. In this setting we define a near
 
 ```python
 
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.anomalyNative&org=None&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.anomalyNative&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
         "dim1":0.5,
@@ -169,7 +173,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.anomalyNative&org=None&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.anomalyNative&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 > Request Body 
@@ -195,7 +199,7 @@ This API is currently used to serve predictions made by anoamly detection algori
   operation=`scmlmodelserver.sql`
 
 ```python
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.sql&org=None&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url,
 json = {
 	      "q":"select * from $df limit 10"
@@ -215,7 +219,7 @@ for all the algorithms. Use the literal `$df` as part of the query which refers 
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.sql&org=None&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -237,7 +241,7 @@ q | SQL Statement | String | A valid SQL statement
   operation=`scmlmodelserver.activeLoad`
 
 ```python
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.activeLoad&org=None&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.activeLoad&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url)
 print(response)
 ```
@@ -245,7 +249,7 @@ This endpoint deletes past last run of an experiment if it is present in scmlmod
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.activeLoad&org=None&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.activeLoad&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -255,7 +259,7 @@ The response contains the same output as Plain SQL response.
   operation=`scmlmodelserver.delete`
   
 ```python
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.delete&org=None&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.delete&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url)
 print(response)
 ```
@@ -263,7 +267,7 @@ An endpoint to delete the current run object from memory and any associated file
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.sql&org=None&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.sql&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -281,7 +285,7 @@ An endpoint to delete the current run object from memory and any associated file
   operation=`scmlmodelserver.executeNamedQuery`
 
 ```python
-modelserver_url = 'https://{BASE_URL}/v2/actions?op=scmlmodelserver.executeNamedQuery&org=None&pid=VALID_PID&expid=VALID_EXPID'
+modelserver_url = 'https://<baseURL>/<version>/actions?op=scmlmodelserver.executeNamedQuery&org=<orgId>&pid=<projectId>&expid=<experimentId>'
 response = requests.post(modelserver_url)
 print(response)
 ```
@@ -290,7 +294,7 @@ be added as a template and referred by a unique ID provided at the time of creat
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlmodelserver.executeNamedQuery&org=None&pid=VALID_PID&expid=VALID_EXPID`
+`POST https://<baseURL>/<version>/actions?op=scmlmodelserver.executeNamedQuery&org=<orgId>&pid=<projectId>&expid=<experimentId>`
 
 `Content-type:application/json`
 
@@ -371,7 +375,7 @@ Get all experiments for a project. The caller specifies the project id and is ab
 
 ```python
 
-api = 'https://{BASE_URL}/v2/actions?op=scmlexperiments.listExperiments&org=None&pid=VALID_PID'
+api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>'
 response = requests.post(api)
 print(response)
 
@@ -379,11 +383,11 @@ print(response)
 
 ### HTTP Request
 
-`GET https://{BASE_URL}/v2/actions?op=scmlexperiments.listExperiments&org=None&pid=VALID_PID`
+`GET https://<baseURL>/<version>/actions?op=scmlexperiments.listExperiments&org=<orgId>&pid=<projectId>`
 
 ### Response
 
-A jsonarray of experiment objects
+An array of experiment objects
 
 
 ## Get Experiment By Id For a Project
@@ -392,7 +396,7 @@ Get a specific experiment for a project by experiment id.
 
 ```python
 
-api = 'https://{BASE_URL}/v2/actions?op=scmlexperiments.getExperiment&org=None&pid=VALID_PID'
+api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getExperiment&org=<orgId>&pid=<projectId>'
 response = requests.post(api,json=json_data)
 print(response)
 
@@ -400,7 +404,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlexperiments.getExperiment&org=None&pid=VALID_PID`
+`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getExperiment&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
@@ -422,7 +426,7 @@ Get a specific valid run object by specifying the run number for an experiment o
 
 ```python
 
-api = 'https://{BASE_URL}/v2/actions?op=scmlexperiments.getRunForExperiment&org=None&pid=VALID_PID'
+api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getRunForExperiment&org=<orgId>&pid=<projectId>'
 response = requests.post(api,json=json_data)
 print(response)
 
@@ -430,7 +434,7 @@ print(response)
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlexperiments.getRunForExperiment&org=None&pid=VALID_PID`
+`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getRunForExperiment&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
@@ -453,14 +457,14 @@ Returns the valid latest run object of an experiment.
 
 ```python
 
-api = 'https://{BASE_URL}/v2/actions?op=scmlexperiments.getLatestRun&org=None&pid=VALID_PID'
+api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getLatestRun&org=<orgId>&pid=<projectId>'
 response = requests.post(api)
 print(response)
 ```
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlexperiments.getLatestRun&org=None&pid=VALID_PID`
+`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getLatestRun&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
@@ -483,14 +487,14 @@ Returns the valid latest run object of an experiment.
 
 ```python
 
-api = 'https://{BASE_URL}/v2/actions?op=scmlexperiments.getLastNRuns&org=None&pid=VALID_PID'
+api = 'https://<baseURL>/<version>/actions?op=scmlexperiments.getLastNRuns&org=<orgId>&pid=<projectId>'
 response = requests.post(api,json=json_data)
 print(response)
 ```
 
 ### HTTP Request
 
-`POST https://{BASE_URL}/v2/actions?op=scmlexperiments.getLastNRuns&org=None&pid=VALID_PID`
+`POST https://<baseURL>/<version>/actions?op=scmlexperiments.getLastNRuns&org=<orgId>&pid=<projectId>`
 
 > Request Body
 
